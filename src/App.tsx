@@ -1,26 +1,57 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { EstadoForm } from './components/EstadoForm';
+import { Component } from 'react';
+import { NavbarComponent } from './components/NavbarComponent';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import axios from 'axios';
+import { EstadoList } from './components/EstadoList';
+import { CssBaseline } from '@mui/material';
+import { PessoaForm } from './components/PessoaForm';
+import { PessoaList } from './components/PessoaList';
+
+function App()
+{
+
+    return(
+      <Router>
+        <CssBaseline/>
+          <div className='App'>
+              <NavbarComponent/>
+              <div className='content'>
+                <Switch>
+                  
+                  { /* Rotas para Estados */ }
+                  <Route exact path='/createEstado'>
+                    <EstadoForm/>
+                  </Route>
+                  <Route exact path='/updateEstado/:id'>
+                    <EstadoForm/>
+                  </Route>
+                  <Route exact path='/estadosList'>
+                    <EstadoList/>
+                  </Route>
+
+                  <Route exact path='/createPessoa'>
+                    <PessoaForm/>
+                  </Route>
+
+                  <Route exact path='/updatePessoa/:id'>
+                    <PessoaForm/>
+                  </Route>
+
+                  <Route exact path='/updatePessoa/:id'>
+                    <PessoaForm/>
+                  </Route>
+                  <Route exact path='/pessoasList'>
+                    <PessoaList/>
+                  </Route>
+
+                </Switch>
+              </div>
+          </div>
+      </Router>
+    );
 }
+  
 
 export default App;
