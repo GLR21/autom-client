@@ -46,9 +46,9 @@ export const EstadoForm = ( param:any ) => {
 					{
 						async (values,actions)=>
 						{
-							if( typeof values.id == 'undefined' )
+							if( typeof values.id == 'undefined' || values.id === '0' )
 							{
-								await axios.post('http://localhost:8080/app/createestado', values).then( (response) => { history.push('/estadosList') } ).catch( (error) => { console.log(error) } );
+								await axios.post('http://localhost:8080/app/createestado', { nome: values.nome, sigla: values.sigla, cod_ibge: values.cod_ibge } ).then( (response) => { history.push('/estadosList') } ).catch( (error) => { console.log(error) } );
 							}
 							else
 							{
