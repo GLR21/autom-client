@@ -1,11 +1,11 @@
 import { Delete, Edit } from '@mui/icons-material';
 import { Box, Tooltip, IconButton, Alert, Snackbar } from '@mui/material';
 import axios from 'axios';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const EstadoActions = ( params:any ) => {
 
-	const history = useHistory();
+	const history = useNavigate();
 
 	const deleteHandler = async (params:any) =>
 	{
@@ -15,7 +15,7 @@ export const EstadoActions = ( params:any ) => {
 
 	const updateHandler = (location:any) =>
 	{
-		history.go(0);
+		history( 0 );
 	}
 	
 	

@@ -3,11 +3,12 @@ import Button from '@mui/material/Button';
 import { Field, Form, Formik } from 'formik';
 import { GenericField } from './GenericField';
 import { estadoSchema } from '../schemas/Estado.schema';
-import axios from 'axios';
-import { useHistory, useParams } from 'react-router-dom';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-interface Values{
+interface Values
+{
 	
 	id?: number|undefined|string;
 	nome: string;
@@ -17,16 +18,16 @@ interface Values{
 
 export const EstadoForm = ( param:any ) => {
 
-	const history = useHistory();
+	const history = useNavigate();
 	const { id } = useParams<{ id: string }>();
 	const [initialValues, setInitialValues] = useState<Values>( { id: '0', nome: '', sigla: '', cod_ibge: 0 } );
-	
+	const apiPrivate = useAxiosPrivate();
 
 	const getEstado = async ( id:any ) =>
 	{
 		try
 		{
-			const response = await axios.get('http://localhost:8080/app/getestado',{ params: { id: id } } )
+			const response = await apiPrivate.get('http://localhost:8080/app/getestado',{ params: { id: id } } )
 			setInitialValues( response.data );
 		}
 		catch( error )
@@ -48,11 +49,11 @@ export const EstadoForm = ( param:any ) => {
 						{
 							if( typeof values.id == 'undefined' || values.id === '0' )
 							{
-								await axios.post('http://localhost:8080/app/createestado', { nome: values.nome, sigla: values.sigla, cod_ibge: values.cod_ibge } ).then( (response) => { history.push('/estadosList') } ).catch( (error) => { console.log(error) } );
+								await apiPrivate.post('http://localhost:8080/app/createestado', { nome: values.nome, sigla: values.sigla, cod_ibge: values.cod_ibge } ).then( (response) => { history('/estadosList') } ).catch( (error) => { console.log(error) } );
 							}
 							else
 							{
-								await axios.put(`http://localhost:8080/app/updateestado`, values).then( (response) => { history.push('/estadosList') } ).catch( (error) => { console.log(error) } );
+								await apiPrivate.put(`http://localhost:8080/app/updateestado`, values).then( (response) => { history('/estadosList') } ).catch( (error) => { console.log(error) } );
 							}
 
 							

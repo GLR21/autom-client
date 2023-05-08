@@ -1,57 +1,35 @@
 import { EstadoForm } from './components/EstadoForm';
-import { Component } from 'react';
-import { NavbarComponent } from './components/NavbarComponent';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-
-import axios from 'axios';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { EstadoList } from './components/EstadoList';
-import { CssBaseline } from '@mui/material';
 import { PessoaForm } from './components/PessoaForm';
 import { PessoaList } from './components/PessoaList';
+import { LoginForm } from './components/LoginForm';
+import { Layout } from './components/Layout';
+import { RequireAuth } from './components/RequireAuth';
+import PersistLogin from './components/PersistLogin';
 
 function App()
 {
 
     return(
-      <Router>
-        <CssBaseline/>
-          <div className='App'>
-              <NavbarComponent/>
-              <div className='content'>
-                <Switch>
-                  
-                  { /* Rotas para Estados */ }
-                  <Route exact path='/createEstado'>
-                    <EstadoForm/>
-                  </Route>
-                  <Route exact path='/updateEstado/:id'>
-                    <EstadoForm/>
-                  </Route>
-                  <Route exact path='/estadosList'>
-                    <EstadoList/>
-                  </Route>
+      <Routes>
+        <Route path='/' element={ <Layout/> }>
 
-                  <Route exact path='/createPessoa'>
-                    <PessoaForm/>
-                  </Route>
-
-                  <Route exact path='/updatePessoa/:id'>
-                    <PessoaForm/>
-                  </Route>
-
-                  <Route exact path='/updatePessoa/:id'>
-                    <PessoaForm/>
-                  </Route>
-                  <Route exact path='/pessoasList'>
-                    <PessoaList/>
-                  </Route>
-
-                </Switch>
-              </div>
-          </div>
-      </Router>
+          <Route path='/login' element={ <LoginForm/>  }/>
+          
+          <Route element={ <PersistLogin/> }>
+            <Route element={ <RequireAuth/> }>
+              <Route path='/createEstado' element={ <EstadoForm/> }/>
+              <Route path='/updateEstado/:id' element={  <EstadoForm/> } />
+              <Route path='/estadosList' element={ <EstadoList/> } />
+              <Route path='/createPessoa' element={ <PessoaForm/> } />
+              <Route path='/updatePessoa/:id' element={ <PessoaForm/> } />
+              <Route path='/pessoasList' element={ <PessoaList/> } />
+            </Route>
+          </Route>
+        </Route>
+      </Routes>
     );
 }
-  
 
 export default App;

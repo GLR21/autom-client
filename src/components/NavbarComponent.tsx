@@ -1,12 +1,23 @@
-import { AppBar, Toolbar, IconButton, Typography, Stack, Button, Menu, MenuItem, Link } from '@mui/material';
+import { AppBar, Toolbar, IconButton, Typography, Stack, Button, Menu, MenuItem } from '@mui/material';
+import { Link } from 'react-router-dom';
 import CatchingPokemon from '@mui/icons-material/CatchingPokemon';
 import { useState } from 'react';
 import './NavbarComponent.css';
+import useAuth from '../hooks/useAuth';
+import useLogout from '../hooks/useLogout';
+import { useNavigate } from 'react-router-dom';
+import { render } from '@testing-library/react';
+import { AutomIcon } from './AutomIcon';
 
 export const NavbarComponent = () => 
 {
 
-	const [anchorEstados, setAnchorEstados] = useState<null | HTMLElement>(null);
+	//@ts-ignore
+	const { signed } = useAuth();
+	const logout = useLogout();
+	const navigate = useNavigate();
+
+ 	const [anchorEstados, setAnchorEstados] = useState<null | HTMLElement>(null);
 	const [anchorPessoas, setAnchorPessoas] = useState<null | HTMLElement>(null);
 	
 	const openEstados = Boolean(anchorEstados);
@@ -29,37 +40,68 @@ export const NavbarComponent = () =>
 		setAnchorEstados(null);
 	}
 
+	const signOut = async () => {
+		try
+		{
+			await logout();
+		}
+		catch(error)
+		{
+			console.log(error);
+		}
+		finally
+		{
+			navigate('/login');
+		}
+	}	
 	return (
+		
 		<AppBar position="static">
 			<Toolbar className='navbar'>
-				<IconButton	size='large' edge='start' color='inherit' aria-label='logo'>
-					<CatchingPokemon/>
-				</IconButton>
+				<AutomIcon/>
 				<Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
 					Autom
 				</Typography>
 				<Stack direction='row' spacing={2}>
-					<Button
-						color='inherit'
-						id='pessoas-button'
-						onClick={handleClickPessoas}
-						aria-control={ openPessoas? 'pessoas-menu' : undefined } 
-						aria-aria-haspopup='true'
-						aria-expanded={ openPessoas ? 'true' : undefined}
-					>
-						Pessoas
-					</Button>
-					<Button 
-						color='inherit'
-						id='estados-button'
-						onClick={handleClickEstados}
-						aria-control={ openEstados  ? 'estados-menu' : undefined } 
-						aria-aria-haspopup='true'
-						aria-expanded={ openEstados ? 'true' : undefined}
-					>
-						Estados
-					</Button>
-					<Button color='inherit'>Login</Button>
+				
+					{ 
+						typeof signed?.accessToken != 'undefined' &&
+							<Button
+								color='inherit'
+								id='pessoas-button'
+								onClick={handleClickPessoas}
+								aria-control={ openPessoas? 'pessoas-menu' : undefined } 
+								aria-aria-haspopup='true'
+								aria-expanded={ openPessoas ? 'true' : undefined}
+							>
+								Pessoas
+							</Button>  
+			  		}	
+					{
+						typeof signed?.accessToken != 'undefined' &&
+
+							<Button 
+								color='inherit'
+								id='estados-button'
+								onClick={handleClickEstados}
+								aria-control={ openEstados  ? 'estados-menu' : undefined } 
+								aria-aria-haspopup='true'
+								aria-expanded={ openEstados ? 'true' : undefined}
+							>
+								Estados
+							</Button>
+					}
+					
+					{
+						typeof signed?.accessToken != 'undefined' &&
+							<Button
+								color='inherit'
+								onClick={signOut}
+						
+							>
+								Logout
+							</Button>
+					}
 				</Stack>
 				<Menu
 					id='estado-menu'
@@ -69,10 +111,10 @@ export const NavbarComponent = () =>
 					onClose={handleCloseEstados}
 				>
 					<MenuItem  onClick={handleCloseEstados}>
-						<Link href='/createEstado' color='inherit' underline='none'>Cadastro de estados</Link>
+						<Link to='/createEstado' color='inherit'>Cadastro de estados</Link>
 					</MenuItem>
 					<MenuItem onClick={handleCloseEstados} >
-						<Link href='/estadosList' color='inherit' underline='none'>Lista de estados</Link>
+						<Link to='/estadosList' color='inherit'>Lista de estados</Link>
 					</MenuItem>
 				</Menu>
 				<Menu
@@ -83,12 +125,12 @@ export const NavbarComponent = () =>
 					onClose={handleClosePessoas}
 				>
 					<MenuItem  onClick={handleClosePessoas}>
-						<Link href='/createPessoa' color='inherit' underline='none'>Cadastro de pessoas</Link>
+						<Link to='/createPessoa' color='inherit'>Cadastro de pessoas</Link>
 					</MenuItem>
 					<MenuItem onClick={handleClosePessoas} >
-						<Link href='/pessoasList' color='inherit' underline='none'>Lista de pessoas</Link>
+						<Link to='/pessoasList' color='inherit'>Lista de pessoas</Link>
 					</MenuItem>
-				</Menu>		
+				</Menu>	
 			</Toolbar>
 		</AppBar>
 	)

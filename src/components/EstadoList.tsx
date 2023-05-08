@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import axios from 'axios';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import { Box } from '@mui/material';
 import { EstadoActions } from './EstadoActions';
 
 export const EstadoList = () =>
 {
 	const [data, setData] = useState([]);
+	const apiPrivate = useAxiosPrivate();
 
 	const getEstados = async () =>
 	{
-		await axios.get('http://localhost:8080/app/getestados').then( (response) => { setData(response.data) } ).catch( (error) => { console.log(error) } );
+		await apiPrivate.get('/app/getestados').then( (response:any) => { setData(response.data) } ).catch( (error:any) => { console.log(error) } );
 	}
 
 	useEffect( () => { getEstados(); }, [] );

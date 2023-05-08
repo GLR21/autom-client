@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import axios from 'axios';
 import { Box, Tooltip, IconButton } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import useAuth from '../hooks/useAuth';
 
 export const PessoaList = () =>
 {
+	//@ts-ignore
+	const { signed } = useAuth();
 	const [data, setData] = useState([]);
-	const history = useHistory();
+	const apiPrivate = useAxiosPrivate();
+	const history = useNavigate();
 	const getPessoas = async () =>
 	{
-		await axios.get
+		await apiPrivate.get
 		(
 			'http://localhost:8080/app/getpessoas'
 		)
 			.then
 			(
-				(response) =>
+				async (response) =>
 				{
 					setData(response.data)
 				}
@@ -27,7 +31,7 @@ export const PessoaList = () =>
 
 	const deleteHandler = async (params:any) =>
 	{
-		await axios.delete
+		await apiPrivate.delete
 		(
 			'http://localhost:8080/app/deletepessoa',
 			{ params: { id : params.id } }
@@ -36,7 +40,7 @@ export const PessoaList = () =>
 			(
 				(response)=>
 				{ 
-					history.go(0);
+					history(0)
 				}
 			)
 			.catch( (error) => { console.log( error ) } );
@@ -68,9 +72,11 @@ export const PessoaList = () =>
 							</Link>
 						</Tooltip>
 						<Tooltip title='Excluir'>
-							<IconButton onClick={ () => { deleteHandler( params ) } }>
-								<Delete color='error'/>
-							</IconButton>
+							<span>
+								<IconButton onClick={ () => { deleteHandler( params ) } } disabled={ params.id == signed.pessoa_id }>
+									<Delete color={ params.id == signed.pessoa_id ? 'disabled' : 'error' }/>
+								</IconButton>
+							</span>
 						</Tooltip>
 					</Box>
 				)

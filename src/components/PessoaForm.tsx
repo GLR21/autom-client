@@ -3,10 +3,12 @@ import Button from '@mui/material/Button';
 import { Field, Form, Formik } from 'formik';
 import { GenericField } from './GenericField';
 import { pessoaSchema, pessoaSchemaUpdate } from '../schemas/Pessoa.schema';
-import axios from 'axios';
-import { useHistory, useParams } from 'react-router-dom';
+import useAxiosPrivate from '../hooks/useAxiosPrivate';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { SelectWrapper } from './SelectWrapper';
+
+
 
 interface Values{
 	
@@ -26,9 +28,9 @@ interface Values{
 
 export const PessoaForm = ( param:any ) => {
 
-	const history = useHistory();
+	const history = useNavigate();
 	const { id } = useParams<{ id: string }>();
-	
+	const apiPrivate = useAxiosPrivate();
 	
 
 	const tipo_pessoa = [ { id: 0, nome: 'Selecione um tipo de pessoa' }, { id: 1, nome: 'Física' }, { id: 2, nome: 'Jurídica' } ];
@@ -58,23 +60,26 @@ export const PessoaForm = ( param:any ) => {
 		try
 		{
 			console.log(id);
-			const response = await axios.get('http://localhost:8080/app/getpessoa',{ params: { id: id } } )
-			setInitialValues(
-								{
-									id: response.data.id,
-									nome: response.data.nome,
-									email: response.data.email,
-									senha: response.data.senha,
-									telefone: response.data.telefone,
-									sys_auth: response.data.sys_auth,
-									cep: response.data.cep,
-									rua: response.data.rua,
-									bairro: response.data.bairro,
-									numero_endereco: response.data.numero_endereco,
-									ref_cidade: response.data.ref_cidade,
-									tipo_pessoa: response.data.tipo_pessoa
-								}
-							);
+			if( typeof id != 'undefined' )
+			{
+				const response = await apiPrivate.get('http://localhost:8080/app/getpessoa',{ params: { id: id } } )
+				setInitialValues(
+									{
+										id: response.data.id,
+										nome: response.data.nome,
+										email: response.data.email,
+										senha: response.data.senha,
+										telefone: response.data.telefone,
+										sys_auth: response.data.sys_auth,
+										cep: response.data.cep,
+										rua: response.data.rua,
+										bairro: response.data.bairro,
+										numero_endereco: response.data.numero_endereco,
+										ref_cidade: response.data.ref_cidade,
+										tipo_pessoa: response.data.tipo_pessoa
+									}
+								);
+			}
 		}
 		catch( error )
 		{
@@ -86,7 +91,7 @@ export const PessoaForm = ( param:any ) => {
 	{
 		try
 		{
-			const response = await axios.get('http://localhost:8080/app/getcidades' );
+			const response = await apiPrivate.get('http://localhost:8080/app/getcidades' );
 			response.data.unshift( cidades[0] );
 			setCidades( response.data );
 			
@@ -97,7 +102,36 @@ export const PessoaForm = ( param:any ) => {
 		}
 	}
 
-	useEffect( () => {  getCidades(); if( typeof id != 'undefined' ) { getPessoa( id ); } }, [] );
+	useEffect
+	( 
+		() =>
+		{
+			getCidades();
+			if( typeof id != 'undefined' )
+			{ 
+				getPessoa( id );
+			}
+			else
+			{
+				setInitialValues
+				(
+					{
+						id: '',
+						nome: '',
+						email: '',
+						senha: '',
+						telefone: '',
+						sys_auth: 0,
+						cep: '',
+						rua: '',
+						bairro: '',
+						numero_endereco: 0,
+						ref_cidade: 0,
+						tipo_pessoa: 0
+					}
+				)
+			}
+		},[initialValues] );
 
 	return (
 				<Formik
@@ -109,8 +143,6 @@ export const PessoaForm = ( param:any ) => {
 						{
 							if( typeof values.id == 'undefined' || values.id == '' )
 							{
-								console.log(values);
-
 								let newValues =
 								{
 									nome: values.nome,
@@ -126,12 +158,12 @@ export const PessoaForm = ( param:any ) => {
 									tipo_pessoa: values.tipo_pessoa
 								}
 
-								await axios.post('http://localhost:8080/app/createpessoa', newValues).
+								await apiPrivate.post('http://localhost:8080/app/createpessoa', newValues).
 								then
 								(
 									(response) => 
 									{ 
-										history.push('/pessoasList')
+										history('/pessoasList')
 									}
 								).catch( (error) => { console.log(error) } );
 							}
@@ -152,7 +184,7 @@ export const PessoaForm = ( param:any ) => {
 									tipo_pessoa: values.tipo_pessoa
 								}
 
-								await axios.put(`http://localhost:8080/app/updatepessoa`, updatedValues ).then( (response) => { history.push('/pessoasList') } ).catch( (error) => { console.log(error) } );
+								await apiPrivate.put(`http://localhost:8080/app/updatepessoa`, updatedValues ).then( (response) => { history('/pessoasList') } ).catch( (error) => { console.log(error) } );
 							}
 						}
 					}
@@ -189,17 +221,20 @@ export const PessoaForm = ( param:any ) => {
 										component={ GenericField }
 									/>
 								</div>
-								<div>
-									
-									<Field
-										name='senha'
-										label="Senha"
-										error={ ( errors.senha && touched.senha ) }
-										helperText={ (errors.senha && touched.senha ) ? errors.senha : '' }
-										component={ GenericField }
-										disabled={ ( typeof id != 'undefined' ) ? true : false }
-									/>
-								</div>
+								{
+									( typeof id == 'undefined' ) &&
+										<div>
+											<Field
+												name='senha'
+												label="Senha"
+												error={ ( errors.senha && touched.senha ) }
+												helperText={ (errors.senha && touched.senha ) ? errors.senha : '' }
+												component={ GenericField }
+												disabled={ ( typeof id != 'undefined' ) ? true : false }
+											/>
+										</div>
+								}
+								
 								<div>
 									<Field
 										name='telefone'
