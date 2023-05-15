@@ -7,6 +7,8 @@ import { LoginForm } from './components/LoginForm';
 import { Layout } from './components/Layout';
 import { RequireAuth } from './components/RequireAuth';
 import PersistLogin from './components/PersistLogin';
+import PedidosForm from './components/PedidosForm';
+import { PedidosList } from './components/PedidosList';
 
 function App()
 {
@@ -19,12 +21,14 @@ function App()
           
           <Route element={ <PersistLogin/> }>
             <Route element={ <RequireAuth/> }>
-              <Route path='/createEstado' element={ <EstadoForm/> }/>
-              <Route path='/updateEstado/:id' element={  <EstadoForm/> } />
-              <Route path='/estadosList' element={ <EstadoList/> } />
-              <Route path='/createPessoa' element={ <PessoaForm/> } />
-              <Route path='/updatePessoa/:id' element={ <PessoaForm/> } />
-              <Route path='/pessoasList' element={ <PessoaList/> } />
+              <Route path='/createEstado'       element={ <EstadoForm/>   }/>
+              <Route path='/updateEstado/:id'   element={ <EstadoForm/>   }/>
+              <Route path='/estadosList'        element={ <EstadoList/>   }/>
+              <Route path='/createPessoa'       element={ <PessoaForm/>   }/>
+              <Route path='/updatePessoa/:id'   element={ <PessoaForm/>   }/>
+              <Route path='/pessoasList'        element={ <PessoaList/>   }/>
+              <Route path='/createPedido'       element={ <PedidosForm/>  }/>
+              <Route path='/pedidosList'        element={ <PedidosList/>  }/>
             </Route>
           </Route>
         </Route>

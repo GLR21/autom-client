@@ -19,9 +19,14 @@ export const NavbarComponent = () =>
 
  	const [anchorEstados, setAnchorEstados] = useState<null | HTMLElement>(null);
 	const [anchorPessoas, setAnchorPessoas] = useState<null | HTMLElement>(null);
+	const [anchorPecas, setAnchorPecas] = useState<null | HTMLElement>(null);
+	const [anchorPedidos, setAnchorPedidos] = useState<null | HTMLElement>(null);
 	
 	const openEstados = Boolean(anchorEstados);
 	const openPessoas = Boolean(anchorPessoas);
+	const openPecas = Boolean(anchorPecas);
+	const openPedidos = Boolean(anchorPedidos);
+
 
 	const handleClickEstados = (event: React.MouseEvent<HTMLButtonElement>) => {
 		setAnchorEstados(event.currentTarget);
@@ -31,6 +36,14 @@ export const NavbarComponent = () =>
 		setAnchorPessoas(event.currentTarget);
 	}
 
+	const handleClickPecas = (event: React.MouseEvent<HTMLButtonElement>) => {
+		setAnchorPecas(event.currentTarget);
+	}
+
+	const handleClickPedidos = (event: React.MouseEvent<HTMLButtonElement>) => {
+		setAnchorPedidos(event.currentTarget);
+	}
+	
 	const handleClosePessoas = () => {
 		setAnchorPessoas(null);
 	}
@@ -40,6 +53,14 @@ export const NavbarComponent = () =>
 		setAnchorEstados(null);
 	}
 
+	const handleClosePecas = () => {
+		setAnchorPecas(null);
+	}
+
+	const handleClosePedidos = () => {
+		setAnchorPedidos(null);
+	}
+	
 	const signOut = async () => {
 		try
 		{
@@ -91,7 +112,33 @@ export const NavbarComponent = () =>
 								Estados
 							</Button>
 					}
-					
+					{
+						typeof signed?.accessToken != 'undefined' &&
+							<Button
+								color='inherit'
+								id='pecas-button'
+								onClick={handleClickPecas}
+								aria-control={ openPecas  ? 'pecas-menu' : undefined }
+								aria-aria-haspopup='true'
+								aria-expanded={ openPecas ? 'true' : undefined}
+							>
+								Peças
+							</Button>
+					}
+					{
+						typeof signed?.accessToken != 'undefined' &&
+							<Button
+								color='inherit'
+								id='pedidos-button'
+								onClick={handleClickPedidos}
+								aria-control={ openPedidos  ? 'pedidos-menu' : undefined }
+								aria-aria-haspopup='true'
+								aria-expanded={ openPedidos ? 'true' : undefined}
+							>
+								Pedidos
+							</Button>
+
+					}
 					{
 						typeof signed?.accessToken != 'undefined' &&
 							<Button
@@ -129,6 +176,35 @@ export const NavbarComponent = () =>
 					</MenuItem>
 					<MenuItem onClick={handleClosePessoas} >
 						<Link to='/pessoasList' color='inherit'>Lista de pessoas</Link>
+					</MenuItem>
+				</Menu>
+				<Menu
+					id='pecas-menu'
+					anchorEl={anchorPecas}
+					open={openPecas}
+					MenuListProps={{ "aria-labelledby": 'pecas-button' }}
+					onClose={handleClosePecas}
+
+				>
+					<MenuItem  onClick={handleClosePecas}>
+						<Link to='/createPeca' color='inherit'>Cadastro de peças</Link>
+					</MenuItem>
+					<MenuItem onClick={handleClosePecas} >
+						<Link to='/pecasList' color='inherit'>Lista de peças</Link>
+					</MenuItem>
+				</Menu>
+				<Menu
+					id='pedidos-menu'
+					anchorEl={anchorPedidos}
+					open={openPedidos}
+					MenuListProps={{ "aria-labelledby": 'pedidos-button' }}
+					onClose={handleClosePedidos}
+				>
+					<MenuItem  onClick={handleClosePedidos}>
+						<Link to='/createPedido' color='inherit'>Cadastro de pedidos</Link>
+					</MenuItem>
+					<MenuItem onClick={handleClosePedidos} >
+						<Link to='/pedidosList' color='inherit'>Lista de pedidos</Link>
 					</MenuItem>
 				</Menu>	
 			</Toolbar>

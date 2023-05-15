@@ -10,9 +10,9 @@ export const RequireAuth = () => {
 
 	return(
 		//@ts-ignore
-		// console.log( auth?.signed ),
+		// console.log( typeof auth?.signed.accessToken  ),
 		//@ts-ignore
-	  	typeof auth?.signed != 'undefined' ? <Outlet/> : <Navigate to='/login' state={{ from: location }} replace/>
+	  	typeof auth?.signed.accessToken != 'undefined' ? <Outlet/> : <Navigate to='/login' state={{ from: location }} replace/>
 	)
 
 }
