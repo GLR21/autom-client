@@ -13,20 +13,28 @@ export const PessoaList = () =>
 	const [data, setData] = useState([]);
 	const apiPrivate = useAxiosPrivate();
 	const history = useNavigate();
+	
 	const getPessoas = async () =>
 	{
-		await apiPrivate.get
-		(
-			'http://localhost:8080/app/getpessoas'
-		)
-			.then
-			(
-				async (response) =>
-				{
-					setData(response.data)
-				}
-			)
-			.catch( (error) => { console.log(error) } );
+		
+		try
+		{
+			const response = await apiPrivate.get('/app/getpessoas');
+
+			await Promise.all( response.data.map( async ( pessoa:any ) =>
+			{
+				console.log( pessoa );
+				const respondeCidade = await apiPrivate.get(`/app/getcidade`, { params: { id: pessoa.ref_cidade } } );
+				pessoa.ref_cidade = respondeCidade.data.nome;
+
+			}));
+
+			setData(response.data);
+		}
+		catch (error)
+		{
+			console.log(error);
+		}
 	}
 
 	const deleteHandler = async (params:any) =>

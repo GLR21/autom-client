@@ -69,8 +69,6 @@ const PedidosForm = () => {
 
 			async (values,actions)=>
 			{
-				console.log(values);
-
 				let param = {
 					ref_pessoa: values.cliente,
 					total: 0,

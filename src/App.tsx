@@ -9,6 +9,8 @@ import { RequireAuth } from './components/RequireAuth';
 import PersistLogin from './components/PersistLogin';
 import PedidosForm from './components/PedidosForm';
 import { PedidosList } from './components/PedidosList';
+import { PedidosReport } from './components/PedidosReports';
+import { PecasList } from './components/PecasList';
 
 function App()
 {
@@ -29,6 +31,8 @@ function App()
               <Route path='/pessoasList'        element={ <PessoaList/>   }/>
               <Route path='/createPedido'       element={ <PedidosForm/>  }/>
               <Route path='/pedidosList'        element={ <PedidosList/>  }/>
+              <Route path='/pedidosReport' element={ <PedidosReport/>  }/>
+              <Route path='/pecasList' element={ <PecasList/>  }/>
             </Route>
           </Route>
         </Route>
