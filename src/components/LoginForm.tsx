@@ -45,6 +45,7 @@ export const LoginForm = () =>
 
 
 	return (
+		<div style={{display:'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', marginTop:'100px', height:'100%' }} >
 		<Formik initialValues={initialValues} validationSchema={validationLoginSchema} onSubmit={getLogin}>
 		  {({ isSubmitting }) => (
 			<Form>
@@ -71,5 +72,6 @@ export const LoginForm = () =>
 			</Form>
 		  )}
 		</Formik>
+		</div>
 	  );
 }

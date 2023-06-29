@@ -60,6 +60,8 @@ export const PedidosReport = () => {
 	useEffect( () => {   getPecas(); getPessoas();  }, [] );
 
 	return (
+			<div style={{display:'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', marginTop:'100px', height:'100%' }} >
+				<h1>Relatório de Pedidos</h1>
 			<Formik
 				initialValues={initialValues}
 				enableReinitialize={true}
@@ -69,8 +71,9 @@ export const PedidosReport = () => {
 					{
 						try
 						{
-							let data = { ref_pessoa: ( values.ref_pessoa == 0 ? null: values.ref_pessoa ), ref_peca: ( values.ref_peca == 0 ? null : values.ref_peca ), ref_report: 'RelatorioPedidos' };
-							const response = await apiPrivate.post('http://localhost:8080/app/reports', data );
+							// let data = { ref_pessoa: ( values.ref_pessoa == 0 ? null: values.ref_pessoa ), ref_peca: ( values.ref_peca == 0 ? null : values.ref_peca ), ref_report: 'RelatorioPedidos' };
+							values.ref_report = 'RelatorioPedidos';
+							const response = await apiPrivate.post('http://localhost:8080/app/reports',  values );
 							
 							const date = new Date();
 
@@ -91,53 +94,116 @@ export const PedidosReport = () => {
 						({ values, errors, touched, isSubmitting, handleChange, handleBlur, handleSubmit }) =>
 						(
 
-							<Form>
-								<Stack spacing={2} direction="column">
-								<TextField 
-									select={true}
-									variant='outlined'
-									name='ref_pessoa'
-									onChange={handleChange}
-									style={{ width: '500px' }}
-									value={values.ref_pessoa}
-								>
-									{
-										(Array.isArray(pessoas) ? pessoas.map(({id, nome })=> ([id, nome])) : Object.entries(pessoas)).map(([key,value])=>
+							<Form
+								style={{ width: '30%' }}
+							>
+								<Stack spacing={2} direction="column" style={{ width: '100%' }} >
+									<TextField 
+										select={true}
+										variant='outlined'
+										name='ref_pessoa'
+										onChange={handleChange}
+										size='small'
+										value={values.ref_pessoa}
+									>
 										{
-											return (
-												<MenuItem key={key} value={key}>
-													{value}
-												</MenuItem>
-											)
-										})
-									}
-								</TextField>
-								<TextField 
-									select={true}
-									variant='outlined'
-									name='ref_peca'
-									onChange={handleChange}
-									style={{ width: '500px' }}
-									value={values.ref_peca}
-									InputLabelProps={{ shrink: true }}
-								>
-									{
-										(Array.isArray(pecas) ? pecas.map(({id, nome })=> ([id, nome])) : Object.entries(pecas)).map(([key,value])=>
+											(Array.isArray(pessoas) ? pessoas.map(({id, nome })=> ([id, nome])) : Object.entries(pessoas)).map(([key,value])=>
+											{
+												return (
+													<MenuItem key={key} value={key}>
+														{value}
+													</MenuItem>
+												)
+											})
+										}
+									</TextField>
+									<TextField 
+										select={true}
+										variant='outlined'
+										name='ref_peca'
+										onChange={handleChange}
+										size='small'
+										value={values.ref_peca}
+										InputLabelProps={{ shrink: true }}
+									>
 										{
-											return (
-												<MenuItem key={key} value={key}>
-													{value}
-												</MenuItem>
-											)
-										})
-									}
-								</TextField>
+											(Array.isArray(pecas) ? pecas.map(({id, nome })=> ([id, nome])) : Object.entries(pecas)).map(([key,value])=>
+											{
+												return (
+													<MenuItem key={key} value={key}>
+														{value}
+													</MenuItem>
+												)
+											})
+										}
+									</TextField>
+									<TextField
+										variant='outlined'
+										name='dt_abertura_inicial'
+										size='small'
+										onChange={handleChange}
+										label='Data de abertura inicial'
+										type='date'
+										InputLabelProps={{ shrink: true }}
+									>
+									</TextField>
+									<TextField
+										variant='outlined'
+										name='dt_abertura_final'
+										size='small'
+										onChange={handleChange}
+										label='Data de abertura final'
+										type='date'
+										InputLabelProps={{ shrink: true }}
+									>
+									</TextField>
+									<TextField
+										variant='outlined'
+										name='dt_encerramento_inicial'
+										size='small'
+										onChange={handleChange}
+										label='Data de conclusão inicial'
+										type='date'
+										InputLabelProps={{ shrink: true }}
+									>
+									</TextField>
+									<TextField
+										variant='outlined'
+										name='dt_encerramento_final'
+										size='small'
+										onChange={handleChange}
+										label='Data de conclusão final'
+										type='date'
+										InputLabelProps={{ shrink: true }}
+									>
+									</TextField>
+									<TextField
+										variant='outlined'
+										name='dt_cancelamento_inicial'
+										size='small'
+										onChange={handleChange}
+										label='Data de cancelamento inicial'
+										type='date'
+										InputLabelProps={{ shrink: true }}
+									>
+									</TextField>
+									<TextField
+										variant='outlined'
+										name='dt_cancelamento_final'
+										size='small'
+										onChange={handleChange}
+										label='Data de cancelamento final'
+										type='date'
+										InputLabelProps={{ shrink: true }}
+									>
+									</TextField>
 								</Stack>
-								<Button type='submit' variant='contained' color='success' size='small'  disabled={isSubmitting} >Enviar</Button>
+								<Button style={{ marginLeft: '25%', display:'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '50%', marginTop:'20px', height:'100%' }} type='submit' variant='contained' color='success' size='small'  disabled={isSubmitting} >Gerar</Button>
 							</Form>
 						)
 						
 					}
 				</Formik>
+			</div>
 			);
 }

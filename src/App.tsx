@@ -12,6 +12,8 @@ import { PedidosList } from './components/PedidosList';
 import { PedidosReport } from './components/PedidosReports';
 import { PecasList } from './components/PecasList';
 
+import { PedidosByPessoaChart } from './components/PedidosByPessoaChart';
+
 function App()
 {
 
@@ -23,16 +25,18 @@ function App()
           
           <Route element={ <PersistLogin/> }>
             <Route element={ <RequireAuth/> }>
-              <Route path='/createEstado'       element={ <EstadoForm/>   }/>
-              <Route path='/updateEstado/:id'   element={ <EstadoForm/>   }/>
-              <Route path='/estadosList'        element={ <EstadoList/>   }/>
-              <Route path='/createPessoa'       element={ <PessoaForm/>   }/>
-              <Route path='/updatePessoa/:id'   element={ <PessoaForm/>   }/>
-              <Route path='/pessoasList'        element={ <PessoaList/>   }/>
-              <Route path='/createPedido'       element={ <PedidosForm/>  }/>
-              <Route path='/pedidosList'        element={ <PedidosList/>  }/>
-              <Route path='/pedidosReport' element={ <PedidosReport/>  }/>
-              <Route path='/pecasList' element={ <PecasList/>  }/>
+              <Route path='/createEstado'       element={ <EstadoForm/>     }/>
+              <Route path='/updateEstado/:id'   element={ <EstadoForm/>     }/>
+              <Route path='/estadosList'        element={ <EstadoList/>     }/>
+              <Route path='/createPessoa'       element={ <PessoaForm/>     }/>
+              <Route path='/updatePessoa/:id'   element={ <PessoaForm/>     }/>
+              <Route path='/pessoasList'        element={ <PessoaList/>     }/>
+              <Route path='/createPedido'       element={ <PedidosForm/>    }/>
+              <Route path='/updatePedido/:id'   element={ <PedidosForm/>    }/>
+              <Route path='/pedidosList'        element={ <PedidosList/>    }/>
+              <Route path='/pedidosReport'      element={ <PedidosReport/>  }/>
+              <Route path='/pecasList'          element={ <PecasList/>      }/>
+              <Route path='/pedidosbypessoachart' element={ <PedidosByPessoaChart /> }/>
             </Route>
           </Route>
         </Route>

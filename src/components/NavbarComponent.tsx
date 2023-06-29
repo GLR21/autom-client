@@ -217,9 +217,6 @@ export const NavbarComponent = () =>
 					onClose={handleClosePecas}
 
 				>
-					{/* <MenuItem  onClick={handleClosePecas}>
-						<Link to='/createPeca' color='inherit'>Cadastro de peças</Link>
-					</MenuItem> */}
 					<MenuItem onClick={handleClosePecas} >
 						<Link to='/pecasList' color='inherit'>Lista de peças</Link>
 					</MenuItem>
@@ -249,6 +246,10 @@ export const NavbarComponent = () =>
 						<Link to='/pedidosReport' color='inherit'>Relatório de pedidos</Link>
 						
 					</MenuItem>
+					<MenuItem onClick={handleCloseRelatorios}>
+						<Link to='/pedidosbypessoachart' color='inherit'>Pedidos por pessoa</Link>
+					</MenuItem>
+					
 				</Menu>
 			</Toolbar>
 		</AppBar>
